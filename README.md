@@ -35,8 +35,7 @@ integrated into the main Borning Challenge platform.
 
 ## Demo
 
-A short demo video is available — presented during the internship interview to showcase the platform's functionality and
-UX.
+A short demo video will be presented during the internship interview to showcase the platform's functionality and UX.
 
 ## License
 
