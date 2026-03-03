@@ -33,61 +33,6 @@ integrated into the main Borning Challenge platform.
 
 > Note: Sample data is hardcoded for this demo proposal.
 
-## Project Structure
-
-```
-borning-challenge/
-├── backend/              # FastAPI application
-│   ├── main.py           # Entry point & route definitions
-│   ├── models/           # Data models (Pydantic)
-│   ├── data/             # Hardcoded sample data
-│   └── requirements.txt
-├── frontend/             # Flutter application
-│   ├── lib/
-│   │   ├── main.dart     # App entry point
-│   │   ├── pages/        # User & Team activity pages
-│   │   ├── widgets/      # Reusable UI components
-│   │   └── services/     # API service layer
-│   └── pubspec.yaml
-└── README.md
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Python `3.11+`
-- Flutter `3.x`
-- Dart `3.x`
-
-### Backend
-
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-API will be available at `http://localhost:8000`.  
-Interactive docs: `http://localhost:8000/docs`
-
-#### Endpoints
-
-| Method | Route                        | Description                         |
-|--------|------------------------------|-------------------------------------|
-| `GET`  | `/activities/user/{user_id}` | Get all activities for a given user |
-| `GET`  | `/activities/team/{team_id}` | Get all activities for a given team |
-
-### Frontend
-
-```bash
-cd frontend
-flutter pub get
-flutter run -d chrome
-```
-
-App will be available at `http://localhost:PORT`.
-
 ## Demo
 
 A short demo video is available — presented during the internship interview to showcase the platform's functionality and
