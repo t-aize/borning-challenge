@@ -153,7 +153,6 @@ USERS_DATA: dict[str, list[Activity]] = {
     ],
 }
 
-# Équipes : chaque équipe contient 6 utilisateurs
 TEAMS_DATA: dict[str, list[str]] = {
     "team_1": ["user_1", "user_2", "user_3", "user_4", "user_5", "user_6"],
 }

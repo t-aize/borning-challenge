@@ -8,8 +8,8 @@ class Activity(BaseModel):
     type: str  # "cycling", "running", etc.
     date: date
     duration: int  # minutes
-    distance: float  # km
-    elevation: float  # mètres
+    distance: float  # kilometers
+    elevation: float  # meters
 
 
 class ActivityStats(BaseModel):

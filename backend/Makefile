@@ -1,4 +1,4 @@
-.PHONY: dev start lint format test
+.PHONY: dev start lint lint-fix format test typecheck seed
 
 dev:
 	uv run uvicorn src.main:app --reload --port 8000
@@ -18,3 +18,8 @@ format:
 test:
 	uv run pytest
 
+type-check:
+	uv run pyright src scripts tests
+
+seed:
+	uv run python -m scripts.seed_db

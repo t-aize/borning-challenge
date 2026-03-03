@@ -7,8 +7,8 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/{user_id}/activities", response_model=ActivityStats)
-def fetch_user_activities(user_id: str) -> ActivityStats:
-    stats = get_user_activities(user_id)
+async def fetch_user_activities(user_id: str) -> ActivityStats:
+    stats = await get_user_activities(user_id)
 
     if stats is None:
         raise HTTPException(status_code=404, detail=f"User '{user_id}' not found")
