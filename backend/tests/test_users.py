@@ -55,3 +55,21 @@ async def test_activity_fields(client: AsyncClient):
     assert "duration" in activity
     assert "distance" in activity
     assert "elevation" in activity
+
+
+async def test_get_user_ids(client: AsyncClient):
+    response = await client.get("/users")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 6
+    assert "user_1" in data
+
+
+async def test_get_user_ids_contains_all_seed_users(client: AsyncClient):
+    response = await client.get("/users")
+
+    data = response.json()
+    for i in range(1, 7):
+        assert f"user_{i}" in data

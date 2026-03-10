@@ -1,7 +1,15 @@
 from ..config import settings
 from ..data.seed import USERS_DATA
-from ..database import get_db
+from ..database import database
 from ..models.activity import Activity, ActivityStats
+from .stats import compute_stats
+
+
+async def get_user_ids() -> list[str]:
+    if settings.is_production:
+        db = database.get()
+        return await db.activities.distinct("user_id")
+    return list(USERS_DATA.keys())
 
 
 async def get_user_activities(user_id: str) -> ActivityStats | None:
@@ -14,11 +22,11 @@ def _get_from_seed(user_id: str) -> ActivityStats | None:
     activities = USERS_DATA.get(user_id)
     if activities is None:
         return None
-    return _compute_stats(activities)
+    return compute_stats(activities)
 
 
 async def _get_from_db(user_id: str) -> ActivityStats | None:
-    db = get_db()
+    db = database.get()
     docs = await db.activities.find({"user_id": user_id}).to_list(None)
     if not docs:
         return None
@@ -33,14 +41,4 @@ async def _get_from_db(user_id: str) -> ActivityStats | None:
         )
         for doc in docs
     ]
-    return _compute_stats(activities)
-
-
-def _compute_stats(activities: list[Activity]) -> ActivityStats:
-    return ActivityStats(
-        total_km=round(sum(a.distance for a in activities), 2),
-        total_elevation=round(sum(a.elevation for a in activities), 2),
-        total_duration=sum(a.duration for a in activities),
-        activity_count=len(activities),
-        activities=sorted(activities, key=lambda a: a.date, reverse=True),
-    )
+    return compute_stats(activities)

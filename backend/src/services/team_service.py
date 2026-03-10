@@ -1,8 +1,17 @@
 from ..config import settings
 from ..data.seed import TEAMS_DATA, USERS_DATA
-from ..database import get_db
-from ..models.activity import Activity, ActivityStats
+from ..database import database
+from ..models.activity import Activity
 from ..models.team import TeamStats
+from .stats import compute_stats
+
+
+async def get_team_ids() -> list[str]:
+    if settings.is_production:
+        db = database.get()
+        docs = await db.teams.find({}, {"team_id": 1}).to_list(None)
+        return [doc["team_id"] for doc in docs]
+    return list(TEAMS_DATA.keys())
 
 
 async def get_team_activities(team_id: str) -> TeamStats | None:
@@ -21,12 +30,12 @@ def _get_from_seed(team_id: str) -> TeamStats | None:
     return TeamStats(
         team_id=team_id,
         members=member_ids,
-        stats=_compute_stats(all_activities),
+        stats=compute_stats(all_activities),
     )
 
 
 async def _get_from_db(team_id: str) -> TeamStats | None:
-    db = get_db()
+    db = database.get()
     team_doc = await db.teams.find_one({"team_id": team_id})
     if team_doc is None:
         return None
@@ -46,15 +55,5 @@ async def _get_from_db(team_id: str) -> TeamStats | None:
     return TeamStats(
         team_id=team_id,
         members=member_ids,
-        stats=_compute_stats(activities),
-    )
-
-
-def _compute_stats(activities: list[Activity]) -> ActivityStats:
-    return ActivityStats(
-        total_km=round(sum(a.distance for a in activities), 2),
-        total_elevation=round(sum(a.elevation for a in activities), 2),
-        total_duration=sum(a.duration for a in activities),
-        activity_count=len(activities),
-        activities=sorted(activities, key=lambda a: a.date, reverse=True),
+        stats=compute_stats(activities),
     )

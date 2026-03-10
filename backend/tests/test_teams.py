@@ -69,3 +69,13 @@ async def test_team_members_count(client: AsyncClient):
 
     data = response.json()
     assert len(data["members"]) == 6
+
+
+async def test_get_team_ids(client: AsyncClient):
+    response = await client.get("/teams")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) >= 1
+    assert "team_1" in data

@@ -4,15 +4,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
-from .database import close_db, connect_db
+from .database import database
 from .routers import teams, users
 
 
 @asynccontextmanager
 async def lifespan(_application: FastAPI):
-    await connect_db()
+    await database.connect()
     yield
-    await close_db()
+    await database.close()
 
 
 app = FastAPI(
